@@ -1,0 +1,31 @@
+/*โค้ดสำหรับ Calibrate แบบสมการเชิงเส้น*/
+
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+
+# ค่าที่ได้จากการวัดและค่าจริง
+measured = np.array([9.16, 9.13, 9.13, 8.96, 8.83, 8.59, 8.36, 8.42, 8.83, 9.1])
+true = np.array([6, 6, 6, 5.9, 5.8, 5.6, 5.4, 5.2, 5.6, 6])
+
+# การสร้างโมเดล Regression
+model = LinearRegression()
+measured = measured.reshape(-1, 1)  # Reshape ข้อมูลสำหรับการทำงาน
+model.fit(measured, true)
+
+# สร้างสมการแคลลิเบรต
+a = model.coef_[0]  # ค่าสัมประสิทธิ์
+b = model.intercept_  # ค่าคงที่
+print(f"สมการแคลลิเบรต: T_true = {a:.2f} * T_measured + {b:.2f}")
+
+# ทำนายค่าใหม่
+predicted = model.predict(measured)
+
+# การแสดงกราฟ
+plt.scatter(measured, true, color='blue', label='Data')
+plt.plot(measured, predicted, color='red', label='Calibration Line')
+plt.xlabel('Measured Value')
+plt.ylabel('True Value')
+plt.legend()
+plt.title('Calibration Curve')
+plt.show()
